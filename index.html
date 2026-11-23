@@ -161,6 +161,12 @@
     .recommendation-table th, .recommendation-table td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
     .recommendation-table th { color: var(--muted); font-size: 10px; letter-spacing: .07em; text-transform: uppercase; }
     .recommendation-table td:first-child { font-weight: 750; white-space: nowrap; }
+    .results-table { width: 100%; min-width: 790px; table-layout: fixed; border-collapse: collapse; font-size: 13px; }
+    .results-table th, .results-table td { width: 14%; padding: 11px 13px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+    .results-table th:first-child, .results-table td:first-child { width: 20%; font-weight: 700; }
+    .results-table th:last-child, .results-table td:last-child { width: 38%; }
+    .results-table thead { background: #f4f7f8; color: var(--muted); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
+    .results-table tbody tr:nth-child(even) { background: #fbfcfc; }
     .recommendation-table tr:last-child td { border-bottom: 0; }
     .finding { border-left: 3px solid var(--blue); padding: 10px 13px; margin: 10px 0; background: #f4f7f8; color: #304653; font-size: 13px; }
     .finding strong { color: var(--ink); }
@@ -172,6 +178,16 @@
     .report-chart { margin: 0; }
     .report-chart img { display: block; width: 100%; height: auto; }
     .report-chart figcaption { margin-top: 8px; color: var(--muted); font-size: 11px; }
+    .report-controls { display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin: 0 0 12px; color: var(--muted); font-size: 12px; }
+    .report-controls select { max-width: 210px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 7px; background: #fff; color: var(--ink); font: inherit; }
+    .report-heatmap { overflow-x: auto; padding-bottom: 4px; }
+    .report-grid { display: grid; min-width: 760px; grid-template-columns: minmax(115px, 1.5fr) repeat(13, minmax(40px, 1fr)); gap: 3px; }
+    .report-cell { min-height: 43px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2px; border: 1px solid rgba(30,55,75,.08); border-radius: 3px; font-size: 10px; text-align: center; }
+    .report-type { justify-content: center; align-items: flex-start; font-weight: 650; }
+    .report-sub { color: var(--muted); font-size: 9px; }
+    .velocity-chart { width: 100%; min-height: 320px; }
+    .velocity-chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+    @media (min-width: 760px) { .velocity-panel { grid-column: 1 / -1; } }
     .zone-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
     .zone-metric { padding: 13px; border: 1px solid var(--line); border-radius: 9px; }
     .zone-metric h3 { margin: 0 0 8px; font-size: 14px; }
@@ -306,39 +322,6 @@
       <p class="chart-note">Recommendations are transcribed from the team’s final-results table; the 0–0 count is the pitcher’s total first pitches, not the sample for each recommended pitch-zone pair. The report flags some recommended combinations with fewer than three observations. Zones refer to Statcast zones. For Eric Lauer’s out-priority recommendation, the source table does not specify the zone.</p>
     </section>
 
-    <section class="charts-grid first-pitch-charts" aria-label="Charts of first pitches at 0-0">
-      <article class="panel">
-        <div class="panel-head"><div><h2>Out-rate difference by pitcher</h2><p class="panel-sub">The team’s report compares plate appearances after first-pitch strikes and first-pitch balls.</p></div></div>
-        <figure class="first-pitch-chart"><img src="./assets/report_figure1_first_pitch_out_difference.png" alt="The report's bar chart of each Toronto pitcher's out-percentage difference: first-pitch strike minus first-pitch ball."><figcaption>Each bar is first-pitch-strike out percentage minus first-pitch-ball out percentage (0.20 = 20 percentage points). Positive bars favor starting with a strike in this sample; negative bars favor starting with a ball. Individual comparisons have uneven and often small samples.</figcaption></figure>
-      </article>
-      <article class="panel">
-        <div class="panel-head"><div><h2>Where first pitches perform in the zone</h2><p class="panel-sub" id="firstPitchZoneSubtitle">Team-wide 0–0 results. Use the recommendation filter to inspect one pitcher.</p></div></div>
-        <div class="zone-metrics">
-          <div class="zone-metric"><h3>CSW%</h3><p>Called strikes + swinging strikes ÷ first pitches. Higher is better.</p><div class="first-zone-grid" id="firstPitchCswZones"></div></div>
-          <div class="zone-metric"><h3>Contact xwOBA</h3><p>Expected batting value on tracked contact from the 0–0 pitch. Lower is better.</p><div class="first-zone-grid" id="firstPitchContactZones"></div></div>
-        </div>
-        <p class="chart-note">Catcher’s view. Each cell includes its own sample size. A dash means no tracked observation for that metric; very small samples are unstable.</p>
-      </article>
-    </section>
-
-    <div class="explorer-intro"><div class="eyebrow">Additional charts from the team write-up</div><p class="section-intro">These figures show the team’s supporting pitch-location and velocity analysis. The Gausman heatmap uses all counts, while the velocity chart is a Scherzer example across cumulative pitch intervals.</p></div>
-    <section class="charts-grid report-charts" aria-label="Additional figures from the data science write-up">
-      <article class="panel">
-        <div class="panel-head"><div><h2>Count-adjusted run value by pitch type and zone</h2><p class="panel-sub">Kevin Gausman · all counts</p></div></div>
-        <figure class="report-chart"><img src="./assets/report_figure2_gausman_carv_zones.png" alt="Kevin Gausman's count-adjusted run value per 100 pitches by pitch type and Statcast zone, with sample sizes."><figcaption>Positive values favor the pitcher. Values are hidden when fewer than three pitches were observed; the color scale is capped at ±20. This is an all-count example, not a first-pitch-only chart.</figcaption></figure>
-      </article>
-      <article class="panel">
-        <div class="panel-head"><div><h2>Pitch velocity by cumulative pitch interval</h2><p class="panel-sub">Max Scherzer · example from the team report</p></div></div>
-        <figure class="report-chart"><img src="./assets/report_figure3_scherzer_velocity.png" alt="Line chart of Max Scherzer's average velocity by pitch type across cumulative pitch intervals."><figcaption>Velocity trends are descriptive. The report cautions that velocity is most directly interpretable for fastballs; these lines alone do not establish fatigue or reduced effectiveness.</figcaption></figure>
-      </article>
-    </section>
-
-    <section class="story-grid" aria-label="Supporting findings">
-      <article class="story"><div class="story-label">Whiffs across all pitches</div><strong class="story-value">50.3% vs 13.9%</strong><div class="story-detail">Split-finger vs four-seam whiff rate; useful context, not a first-pitch recommendation by itself.</div></article>
-      <article class="story"><div class="story-label">A whiff is not always a good opener</div><strong class="story-value">70% vs 27.3%</strong><div class="story-detail">Slider Zone 14 whiff rate across pitches vs first-pitch strike rate in that location.</div></article>
-      <article class="story"><div class="story-label">First-pitch strikeouts</div><strong class="story-value">Not significant</strong><div class="story-detail">The report found no statistically significant first-pitch strike vs ball difference in strikeouts (p = .240).</div></article>
-    </section>
-
     <div class="explorer-intro"><div class="eyebrow">Supporting exploration · all counts</div><p class="section-intro">The interactive charts below summarize all 2,784 cleaned Toronto pitches, not only first pitches. Use them to explore pitch-type and location patterns behind the project, while keeping the first-pitch recommendations above as the main result.</p></div>
 
     <section class="stat-grid" id="summaryStats" aria-label="Selected pitcher summary" aria-live="polite"></section>
@@ -396,6 +379,48 @@
     </section>
 
     <p class="definition" id="readout"></p>
+
+    <section class="charts-grid first-pitch-charts" aria-label="Charts of first pitches at 0-0">
+      <article class="panel">
+        <div class="panel-head"><div><h2>Out-rate difference by pitcher</h2><p class="panel-sub">The team’s report compares plate appearances after first-pitch strikes and first-pitch balls.</p></div></div>
+        <figure class="first-pitch-chart"><img src="./assets/report_figure1_first_pitch_out_difference.png" alt="The report's bar chart of each Toronto pitcher's out-percentage difference: first-pitch strike minus first-pitch ball."><figcaption>Each bar is first-pitch-strike out percentage minus first-pitch-ball out percentage (0.20 = 20 percentage points). Positive bars favor starting with a strike in this sample; negative bars favor starting with a ball. Individual comparisons have uneven and often small samples.</figcaption></figure>
+      </article>
+      <article class="panel">
+        <div class="panel-head"><div><h2>Where first pitches perform in the zone</h2><p class="panel-sub" id="firstPitchZoneSubtitle">Team-wide 0–0 results. Use the recommendation filter to inspect one pitcher.</p></div></div>
+        <div class="zone-metrics">
+          <div class="zone-metric"><h3>CSW%</h3><p>Called strikes + swinging strikes ÷ first pitches. Higher is better.</p><div class="first-zone-grid" id="firstPitchCswZones"></div></div>
+          <div class="zone-metric"><h3>Contact xwOBA</h3><p>Expected batting value on tracked contact from the 0–0 pitch. Lower is better.</p><div class="first-zone-grid" id="firstPitchContactZones"></div></div>
+        </div>
+        <p class="chart-note">Catcher’s view. Each cell includes its own sample size. A dash means no tracked observation for that metric; very small samples are unstable.</p>
+      </article>
+    </section>
+
+    <div class="explorer-intro"><div class="eyebrow">Additional chart from the team write-up</div><p class="section-intro">Explore the report’s velocity analysis by pitcher. The chart uses all counts and 15-pitch intervals during innings 1–9.</p></div>
+    <div class="report-controls"><label for="reportPitcher">View pitcher</label><select id="reportPitcher" aria-label="Choose a pitcher for both report charts"></select></div>
+    <section class="charts-grid report-charts" aria-label="Additional figures from the data science write-up">
+      <article class="panel velocity-panel">
+        <div class="panel-head"><div><h2>Pitch velocity by cumulative pitch interval</h2><p class="panel-sub" id="velocitySubtitle">Kevin Gausman · 15-pitch intervals</p></div></div>
+        <div class="velocity-chart" id="reportVelocity" aria-live="polite"></div>
+        <p class="chart-note">Velocity trends are descriptive. They do not establish fatigue or reduced effectiveness; fastball velocity is most directly interpretable.</p>
+      </article>
+    </section>
+
+    <section class="panel" aria-labelledby="roundResultsTitle">
+      <div class="panel-head"><div><h2 id="roundResultsTitle">Postseason results by round</h2><p class="panel-sub">Descriptive rates and tests reported in the hypothesis-testing write-up</p></div></div>
+      <div class="table-scroll"><table class="results-table"><thead><tr><th>Measure</th><th>ALDS</th><th>ALCS</th><th>World Series</th><th>Test result</th></tr></thead><tbody>
+        <tr><td>Strikeout rate</td><td>24.2%</td><td>27.7%</td><td>24.6%</td><td>p = 0.627 · not significant</td></tr>
+        <tr><td>Whiff rate</td><td>29.2%</td><td>29.9%</td><td>26.5%</td><td>p = 0.442 · not significant</td></tr>
+        <tr><td>Out rate</td><td>66.7%</td><td>69.1%</td><td>72.4%</td><td>p = 0.434 · not significant</td></tr>
+        <tr><td>Fastball velocity</td><td>94.74 mph</td><td>94.29 mph</td><td>93.94 mph</td><td>Raw test: p = 0.000439 (significant)<br>Matched-pitcher test: p = 0.150 (not significant)</td></tr>
+      </tbody></table></div>
+      <p class="chart-note"><strong>Conclusion:</strong> There is no convincing evidence that overall pitching effectiveness deteriorated across the postseason. Although raw fastball velocity differed by series, the same-pitcher comparison across all three rounds was not significant (10 matched pitchers). The small descriptive velocity decline is not proof of fatigue.</p>
+    </section>
+
+    <section class="story-grid" aria-label="Supporting findings">
+      <article class="story"><div class="story-label">Whiffs across all pitches</div><strong class="story-value">50.3% vs 13.9%</strong><div class="story-detail">Split-finger vs four-seam whiff rate; useful context, not a first-pitch recommendation by itself.</div></article>
+      <article class="story"><div class="story-label">A whiff is not always a good opener</div><strong class="story-value">70% vs 27.3%</strong><div class="story-detail">Slider Zone 14 whiff rate across pitches vs first-pitch strike rate in that location.</div></article>
+      <article class="story"><div class="story-label">First-pitch strikeouts</div><strong class="story-value">Not significant</strong><div class="story-detail">The report found no statistically significant first-pitch strike vs ball difference in strikeouts (p = .240).</div></article>
+    </section>
 
     <section class="method-grid" aria-label="Definitions and source">
       <article class="method">
