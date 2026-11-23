@@ -152,6 +152,36 @@
     .heat-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .button-quiet { min-height: 34px; padding: 5px 10px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--ink); cursor: pointer; font-size: 11px; font-weight: 700; }
     .button-quiet[aria-pressed="true"] { border-color: var(--blue); color: var(--blue); background: #eaf2f5; }
+    .recommendations { margin: 22px 0 28px; }
+    .recommendation-controls { display: flex; align-items: end; gap: 12px; flex-wrap: wrap; margin: 14px 0 12px; }
+    .recommendation-controls label { display: block; margin-bottom: 5px; color: var(--muted); font-size: 11px; font-weight: 750; letter-spacing: .06em; text-transform: uppercase; }
+    .recommendation-controls select { min-width: 240px; }
+    .table-scroll { overflow-x: auto; }
+    .recommendation-table { width: 100%; border-collapse: collapse; min-width: 740px; font-size: 13px; }
+    .recommendation-table th, .recommendation-table td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .recommendation-table th { color: var(--muted); font-size: 10px; letter-spacing: .07em; text-transform: uppercase; }
+    .recommendation-table td:first-child { font-weight: 750; white-space: nowrap; }
+    .recommendation-table tr:last-child td { border-bottom: 0; }
+    .finding { border-left: 3px solid var(--blue); padding: 10px 13px; margin: 10px 0; background: #f4f7f8; color: #304653; font-size: 13px; }
+    .finding strong { color: var(--ink); }
+    .section-intro { max-width: 790px; color: var(--muted); font-size: 13px; }
+    .explorer-intro { margin: 28px 0 12px; }
+    .first-pitch-chart { margin: 0 0 18px; }
+    .first-pitch-chart img { display: block; width: 100%; height: auto; }
+    .first-pitch-chart figcaption { margin-top: 8px; color: var(--muted); font-size: 11px; }
+    .report-chart { margin: 0; }
+    .report-chart img { display: block; width: 100%; height: auto; }
+    .report-chart figcaption { margin-top: 8px; color: var(--muted); font-size: 11px; }
+    .zone-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+    .zone-metric { padding: 13px; border: 1px solid var(--line); border-radius: 9px; }
+    .zone-metric h3 { margin: 0 0 8px; font-size: 14px; }
+    .zone-metric p { margin: 0 0 10px; color: var(--muted); font-size: 11px; }
+    .first-zone-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+    .first-zone-cell { min-height: 84px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 6px; text-align: center; }
+    .first-zone-id { color: var(--muted); font-size: 10px; font-weight: 700; }
+    .first-zone-value { margin: 2px 0; font-size: 15px; font-weight: 760; font-variant-numeric: tabular-nums; }
+    .first-zone-n { color: #425966; font-size: 10px; }
+    .first-zone-empty { background: #f2f4f4 !important; color: #82919a; }
     .heatmap-scroll { overflow-x: auto; padding-bottom: 5px; }
     .heatmap-grid {
       display: grid;
@@ -210,7 +240,7 @@
     .tabular { font-variant-numeric: tabular-nums; }
     @media (max-width: 900px) {
       main { padding: 28px 18px 42px; }
-      .charts-grid { grid-template-columns: 1fr; }
+      .charts-grid, .zone-metrics { grid-template-columns: 1fr; }
       .story-grid { grid-template-columns: 1fr 1fr; }
       .story:first-child { grid-row: span 2; }
       .controls { grid-template-columns: 1fr 1fr; }
@@ -244,29 +274,72 @@
   <div class="masthead"><strong>Toronto baseball analysis</strong><span>2025 postseason · pitch by pitch</span></div>
   <main>
     <header>
-      <div class="eyebrow">Pitching performance explorer</div>
-      <h1>Where did Toronto’s postseason whiffs come from?</h1>
-      <p class="lede">Compare pitcher results, pitch types, and Statcast zones. Start with the team-wide patterns, then select a pitcher to explore how the results change.</p>
+      <div class="eyebrow">First-pitch strategy · Toronto Blue Jays</div>
+      <h1>What should each pitcher throw to start an at-bat?</h1>
+      <p class="lede">The project recommends a pitch and location for two goals: get a strike or prioritize an out. Explore the team’s findings, then inspect all-count pitch patterns as supporting context.</p>
       <div class="scope"><span>15 pitchers</span><span>2,784 tracked pitches</span><span>2025 MLB postseason</span></div>
     </header>
 
     <section class="story-grid" aria-label="Project findings">
       <article class="story">
-        <div class="story-label">The zone split · whiffs per swing</div>
-        <strong class="story-value">49.4% vs 18.2%</strong>
-        <div class="story-detail">Outside-zone swings: 209 / 423 · In-zone swings: 159 / 873</div>
+        <div class="story-label">Outs after the first pitch</div>
+        <strong class="story-value">73.89% vs 63.34%</strong>
+        <div class="story-detail">First-pitch strike vs first-pitch ball; Blue Jays postseason data.</div>
       </article>
       <article class="story">
-        <div class="story-label">Pitch-type contrast · all pitchers</div>
-        <strong class="story-value">50.3% vs 14.0%</strong>
-        <div class="story-detail">Split-finger: 93 / 185 swings · 4-seam: 61 / 436</div>
+        <div class="story-label">Association with making an out</div>
+        <strong class="story-value">p = .01176</strong>
+        <div class="story-detail">Holm-adjusted result reported by the team; adjusted OR 1.80 (95% CI 1.26–2.58).</div>
       </article>
       <article class="story">
-        <div class="story-label">Highest pitcher whiff rate</div>
-        <strong class="story-value">37.0% · Trey Yesavage</strong>
-        <div class="story-detail">74 whiffs on 200 swings across 440 pitches</div>
+        <div class="story-label">No universal first pitch</div>
+        <strong class="story-value">15 pitcher plans</strong>
+        <div class="story-detail">Individual evidence was generally inconclusive; Seranthony Domínguez was the reported exception (p = .0344).</div>
       </article>
     </section>
+
+    <section class="panel recommendations" aria-labelledby="recommendationTitle">
+      <div class="panel-head"><div><h2 id="recommendationTitle">Team recommendations by pitcher</h2><p class="panel-sub">The final-results table gives each pitcher a strike-priority and an out-priority option. The first-pitch charts below use pitches actually thrown at 0–0.</p></div></div>
+      <div class="recommendation-controls"><div><label for="recPitcher">Filter recommendations</label><select id="recPitcher"><option value="ALL">All pitchers</option></select></div></div>
+      <div class="table-scroll"><table class="recommendation-table"><thead><tr><th>Pitcher</th><th>0–0 total pitches</th><th>Need a strike</th><th>Need an out</th><th>Team note</th></tr></thead><tbody id="recommendationRows"></tbody></table></div>
+      <p class="finding"><strong>How to interpret:</strong> These are exploratory, data-supported recommendations, not guaranteed outcomes. The report flags small samples for some pitcher/location combinations; use the situational notes and review sample sizes before treating a choice as reliable.</p>
+      <p class="chart-note">Recommendations are transcribed from the team’s final-results table; the 0–0 count is the pitcher’s total first pitches, not the sample for each recommended pitch-zone pair. The report flags some recommended combinations with fewer than three observations. Zones refer to Statcast zones. For Eric Lauer’s out-priority recommendation, the source table does not specify the zone.</p>
+    </section>
+
+    <section class="charts-grid first-pitch-charts" aria-label="Charts of first pitches at 0-0">
+      <article class="panel">
+        <div class="panel-head"><div><h2>Out-rate difference by pitcher</h2><p class="panel-sub">The team’s report compares plate appearances after first-pitch strikes and first-pitch balls.</p></div></div>
+        <figure class="first-pitch-chart"><img src="./assets/report_figure1_first_pitch_out_difference.png" alt="The report's bar chart of each Toronto pitcher's out-percentage difference: first-pitch strike minus first-pitch ball."><figcaption>Each bar is first-pitch-strike out percentage minus first-pitch-ball out percentage (0.20 = 20 percentage points). Positive bars favor starting with a strike in this sample; negative bars favor starting with a ball. Individual comparisons have uneven and often small samples.</figcaption></figure>
+      </article>
+      <article class="panel">
+        <div class="panel-head"><div><h2>Where first pitches perform in the zone</h2><p class="panel-sub" id="firstPitchZoneSubtitle">Team-wide 0–0 results. Use the recommendation filter to inspect one pitcher.</p></div></div>
+        <div class="zone-metrics">
+          <div class="zone-metric"><h3>CSW%</h3><p>Called strikes + swinging strikes ÷ first pitches. Higher is better.</p><div class="first-zone-grid" id="firstPitchCswZones"></div></div>
+          <div class="zone-metric"><h3>Contact xwOBA</h3><p>Expected batting value on tracked contact from the 0–0 pitch. Lower is better.</p><div class="first-zone-grid" id="firstPitchContactZones"></div></div>
+        </div>
+        <p class="chart-note">Catcher’s view. Each cell includes its own sample size. A dash means no tracked observation for that metric; very small samples are unstable.</p>
+      </article>
+    </section>
+
+    <div class="explorer-intro"><div class="eyebrow">Additional charts from the team write-up</div><p class="section-intro">These figures show the team’s supporting pitch-location and velocity analysis. The Gausman heatmap uses all counts, while the velocity chart is a Scherzer example across cumulative pitch intervals.</p></div>
+    <section class="charts-grid report-charts" aria-label="Additional figures from the data science write-up">
+      <article class="panel">
+        <div class="panel-head"><div><h2>Count-adjusted run value by pitch type and zone</h2><p class="panel-sub">Kevin Gausman · all counts</p></div></div>
+        <figure class="report-chart"><img src="./assets/report_figure2_gausman_carv_zones.png" alt="Kevin Gausman's count-adjusted run value per 100 pitches by pitch type and Statcast zone, with sample sizes."><figcaption>Positive values favor the pitcher. Values are hidden when fewer than three pitches were observed; the color scale is capped at ±20. This is an all-count example, not a first-pitch-only chart.</figcaption></figure>
+      </article>
+      <article class="panel">
+        <div class="panel-head"><div><h2>Pitch velocity by cumulative pitch interval</h2><p class="panel-sub">Max Scherzer · example from the team report</p></div></div>
+        <figure class="report-chart"><img src="./assets/report_figure3_scherzer_velocity.png" alt="Line chart of Max Scherzer's average velocity by pitch type across cumulative pitch intervals."><figcaption>Velocity trends are descriptive. The report cautions that velocity is most directly interpretable for fastballs; these lines alone do not establish fatigue or reduced effectiveness.</figcaption></figure>
+      </article>
+    </section>
+
+    <section class="story-grid" aria-label="Supporting findings">
+      <article class="story"><div class="story-label">Whiffs across all pitches</div><strong class="story-value">50.3% vs 13.9%</strong><div class="story-detail">Split-finger vs four-seam whiff rate; useful context, not a first-pitch recommendation by itself.</div></article>
+      <article class="story"><div class="story-label">A whiff is not always a good opener</div><strong class="story-value">70% vs 27.3%</strong><div class="story-detail">Slider Zone 14 whiff rate across pitches vs first-pitch strike rate in that location.</div></article>
+      <article class="story"><div class="story-label">First-pitch strikeouts</div><strong class="story-value">Not significant</strong><div class="story-detail">The report found no statistically significant first-pitch strike vs ball difference in strikeouts (p = .240).</div></article>
+    </section>
+
+    <div class="explorer-intro"><div class="eyebrow">Supporting exploration · all counts</div><p class="section-intro">The interactive charts below summarize all 2,784 cleaned Toronto pitches, not only first pitches. Use them to explore pitch-type and location patterns behind the project, while keeping the first-pitch recommendations above as the main result.</p></div>
 
     <section class="stat-grid" id="summaryStats" aria-label="Selected pitcher summary" aria-live="polite"></section>
 
@@ -327,14 +400,15 @@
     <section class="method-grid" aria-label="Definitions and source">
       <article class="method">
         <h2>How to read these results</h2>
-        <p>Whiff rate is whiffs divided by swings, so the outside-zone comparison is conditional on a swing. CSW% is (called strikes + whiffs) divided by pitches. Positive count-adjusted run value favors the pitcher. Lower xwOBA on balls in play favors the pitcher. These are descriptive postseason splits; small samples can move rates sharply.</p>
+        <p>Whiff rate is whiffs divided by swings; it is not the chance of getting an out or a strike. CSW% is (called strikes + whiffs) divided by pitches. Positive count-adjusted run value favors the pitcher. Lower xwOBA on balls in play favors the pitcher. The team found first-pitch strikes were associated with a higher out percentage, but observational data do not establish causation.</p>
       </article>
       <article class="method">
         <h2>Data and method</h2>
-        <p>Toronto pitching rows from the <a href="https://www.kaggle.com/datasets/janus137/mlb-postseason-2025-pitch-by-pitch-data" target="_blank" rel="noreferrer">2025 MLB Postseason Pitch-by-Pitch dataset</a> by janus137 on Kaggle. The team’s shared analysis code aggregates by pitcher, pitch type, and Statcast zone. The shared CSV reports 2,784 cleaned pitches across 15 pitchers.</p>
+        <p>Toronto pitching rows from the <a href="https://www.kaggle.com/datasets/janus137/mlb-postseason-2025-pitch-by-pitch-data" target="_blank" rel="noreferrer">2025 MLB Postseason Pitch-by-Pitch dataset</a> by janus137 on Kaggle. The first-pitch charts filter the original file to 0–0 pitches: 702 Toronto pitches across 15 pitchers. CSW is called strikes plus swinging strikes (including blocked swinging strikes) divided by pitches. Contact xwOBA uses tracked balls in play only. The recommendation table and out-rate tests come from the team’s final results and write-up.</p>
       </article>
+      <article class="method"><h2>Limitations and context</h2><p>The results cover a single postseason and have uneven, sometimes very small samples by pitcher and location. Batter tendencies and handedness were not fully modeled. Pitch choice depends on count, batter, outs, runners, score, and execution; small descriptive splits should guide further review, not dictate every pitch. The team reported that repeated batter matchups and postseason-round comparisons were not statistically significant, and that velocity declined by about 0.118 mph per 10 pitches.</p></article>
     </section>
-    <footer><span>Toronto Blue Jays · 2025 postseason</span><span>Rates are descriptive; read each denominator before comparing.</span></footer>
+    <footer><span>Toronto Blue Jays · 2025 postseason</span><span>Sources: team write-up, final results, and shared pitch-level CSVs · Rates are descriptive.</span></footer>
   </main>
 
   <script src="./app.js" defer></script>
